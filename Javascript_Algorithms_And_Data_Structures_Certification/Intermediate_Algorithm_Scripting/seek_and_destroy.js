@@ -41,5 +41,5 @@ function destroyer(arr) {
 }
 
 
-// ADVANCED CODE SOLUTION (one line!!)
+// ADVANCED CODE SOLUTION (one line!! )
 const destroyer = (arr, ...args) => arr.filter(i => !args.includes(i));
