@@ -29,16 +29,16 @@
 
 
   // CLASSIC RECURSIVE 
-  function flatten(arr) {
+  function steamrollArray(arr) {
     if(!Array.isArray(arr)) {
       return [arr];
     }
 
     var newArray = [];
     for(var i = 0; i < arr.length; i++) {
-      newArray = newArray.concat(flatten(arr[i]));
+      newArray = newArray.concat(steamrollArray(arr[i]));
     }
     return newArray;
   }
   
-  flatten([1,[2,[3]],[4]]); // => [1,2,3,4]
+  steamrollArray([[["a"]], [["b"]]]);
