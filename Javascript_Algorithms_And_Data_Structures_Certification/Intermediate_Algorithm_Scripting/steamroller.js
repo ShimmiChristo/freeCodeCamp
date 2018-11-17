@@ -1,20 +1,26 @@
 // Flatten a nested array. You must account for varying levels of nesting.
 // Remember to use Read-Search-Ask if you get stuck. Try to pair program. Write your own code.
-function steamrollArray(arr) {
-    // I'm a steamroller, baby
-    // Flatten 1 nested array
-    // Check if array is present in array. 
-    // Use typeof array? No
-    // Use array.includes? 
-    // Use Array.isArray? Yes
-    // Flatten 1 nested array
-    if (Array.isArray(arr)) { 
-      console.log('real array');
-      if(arr.length>0) { 
-  
+  // I'm a steamroller, baby
+  // Flatten 1 nested array
+  // Check if array is present in array. 
+  // Use array.includes? 
+  // Use Array.isArray? Yes
+  // Flatten 1 nested array
+  // use recursion
+  function steamrollArray(arr) {
+    var newArr = [];
+    // var arrCopy = [...arr];
+    var arrLength = arr.length;
+    var n = 0;
+    while (arr.length > 0) {
+      var val = arr.shift();
+      if (Array.isArray(val)) { 
+          arr = val.concat(arr);
+      } else {
+        newArr.push(val);
       }
     }
-    return arr;
+    console.log(newArr);
+    return newArr;
   }
-  
-  steamrollArray([1, [2], [3, [[4]]]]);
+  steamrollArray([1,2,[90],[8], [3, [[4]]]]);
