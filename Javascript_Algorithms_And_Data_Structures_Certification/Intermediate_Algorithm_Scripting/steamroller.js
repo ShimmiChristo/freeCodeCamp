@@ -24,3 +24,21 @@
     return newArr;
   }
   steamrollArray([1,2,[90],[8], [3, [[4]]]]);
+
+
+
+
+  // CLASSIC RECURSIVE 
+  function flatten(arr) {
+    if(!Array.isArray(arr)) {
+      return [arr];
+    }
+
+    var newArray = [];
+    for(var i = 0; i < arr.length; i++) {
+      newArray = newArray.concat(flatten(arr[i]));
+    }
+    return newArray;
+  }
+  
+  flatten([1,[2,[3]],[4]]); // => [1,2,3,4]
