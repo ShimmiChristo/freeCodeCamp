@@ -7,15 +7,35 @@
 
 
 function addTogether() {
-    
-
-
-
-
-    return false;
+  var args = new Array(arguments.length);
+  for (var i=0; i<args.length; i++) {
+    args[i] = arguments[i];
   }
-  
-  addTogether(2, 3) // should return 5.
-  addTogether(2)(3) // should return 5.
-  addTogether(2)([3]) // should return undefined.
-  addTogether(2, "3") // should return undefined.
+  if(args.length == 2){
+
+    if(typeof arguments[0] != 'number' || typeof arguments[1] != 'number') {
+      return undefined;
+    } else {
+      return arguments[0]+arguments[1];
+    }
+  }
+  if (args.length == 1) {
+    var a = arguments[0];
+    var b = arguments[1];
+    if (typeof a != 'number') {
+      return undefined;
+    } else {
+      return function(b){
+        if(typeof b !=='number'){
+          return undefined;
+          } else 
+          return a+b;
+      };
+    }
+  }
+
+
+}
+
+// addTogether(2,3); 
+addTogether(2)([3]);
