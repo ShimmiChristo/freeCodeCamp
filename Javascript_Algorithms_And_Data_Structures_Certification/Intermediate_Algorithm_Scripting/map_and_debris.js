@@ -1,30 +1,3 @@
-
-function orbitalPeriod(arr) {
-  var GM = 398600.4418;
-  var earthRadius = 6367.4447;
-  var t = 2 * Math.PI;
-  var newArr = [];
-  // notes
-  // need to use JS Math Pow
-  // need to use Math.sqrt()
-  // need to use Math.round()
-  // var radius = ((earthRadis + avgAlt)^3)/GM;
-  var radius = Math.pow(earthRadius + 35873.5553,3)/GM;
-  var sqrt = Math.sqrt(radius);
-  var orbitPer = Math.round(t * sqrt);
-  console.log(orbitPer);
-
-  for (var i in arr) {
-      newArr.push(getOrbPeriod(arr[elem]));
-  }
-      console.log(newArr);  
-  return arr;
-}
-
-orbitalPeriod([{name : "sputnik", avgAlt : 35873.5553}]);
-
-
-
 function orbitalPeriod(arr) {
   var GM = 398600.4418;
   var earthRadius = 6367.4447;
@@ -35,39 +8,93 @@ function orbitalPeriod(arr) {
   // Math.pow
   // Math.sqrt
   // Math.round
+  // need to delete object and then create new object
   var t = 2 * Math.PI;
   var earthRadius = 6367.4447;
   var GM = 398600.4418;
 
-  for(var i=0; i<arr.length; i++){
-    var newObj = arr[i];
-    for (var elem in newObj){
-        // console.log(elem);
-        // console.log(newObj[elem]);
-        if (elem == 'avgAlt') {
-          // console.log(newObj[elem]);
-          var avgAltitude = newObj[elem];
+    for (var elem in arr){
+          console.log(arr[elem].avgAlt);
+          var avgAltitude = arr[elem].avgAlt;
           var earthOrb = Math.pow((earthRadius + avgAltitude),3);
           var solution = t * Math.sqrt(earthOrb/GM);  
-          // console.log(Math.round(solution));
-          newObj[elem] = Math.round(solution);
-          console.log(elem = 'orbitalPeriod');
-          // return (newObj[elem]);
-          // newArr.push(newObj[elem]);
-        }
-    }
+          var final = Math.round(solution);
+          delete arr[elem].avgAlt;
+          arr[elem].orbitalPeriod = final;
   }
-  for (var j=0;j<arr.length;j++) {
-    // console.log(arr[j]);
-    var doubleX = arr[j];
-    for (var x in doubleX){
-      console.log(x);
-      // console.log(doubleX[x]);
-    }
-  }
-  // console.log(arr);
+
   return arr;
 }
 
 // orbitalPeriod([{name : "sputnik", avgAlt : 35873.5553}]);
 orbitalPeriod([{name: "iss", avgAlt: 413.6}, {name: "hubble", avgAlt: 556.7}, {name: "moon", avgAlt: 378632.553}]);
+
+
+// BASIC CODE SOLUTION
+
+function orbitalPeriod(arr) {
+  var GM = 398600.4418;
+  var earthRadius = 6367.4447;
+  var a = 2 * Math.PI;
+  var newArr = [];
+  var getOrbPeriod = function(obj) {
+    var c = Math.pow(earthRadius + obj.avgAlt, 3);
+    var b = Math.sqrt(c / GM);
+    var orbPeriod = Math.round(a * b);
+    delete obj.avgAlt;
+    obj.orbitalPeriod = orbPeriod;
+    return obj;
+  };
+
+  for (var elem in arr) {
+    newArr.push(getOrbPeriod(arr[elem]));
+  }
+
+  return newArr;
+}
+
+// test here
+orbitalPeriod([{name : "sputnik", avgAlt : 35873.5553}]);
+
+
+// INTERMEDIATE CODE SOLUTION 
+function orbitalPeriod(arr) {
+  var GM = 398600.4418;
+  var earthRadius = 6367.4447;
+
+  //Looping through each key in arr object
+  for(var prop in arr) {
+    //Rounding off the orbital period value
+    var orbitalPer = Math.round(2 * Math.PI * Math.sqrt(Math.pow(arr[prop].avgAlt + earthRadius, 3) / GM));
+    //deleting the avgAlt property
+    delete arr[prop].avgAlt;
+    //adding orbitalPeriod property
+    arr[prop].orbitalPeriod = orbitalPer;
+  }
+
+  return arr;
+}
+
+// test here
+orbitalPeriod([{name : "sputnik", avgAlt : 35873.5553}]);
+
+
+// ADVANCED CODE SOLUTION 
+function orbitalPeriod(arr) {
+  var GM = 398600.4418;
+  var earthRadius = 6367.4447;
+
+  // Loop through each item in the array arr
+  arr.forEach(function(item) {
+    // Calculate the Orbital period value
+    var tmp = Math.round(2 * Math.PI * Math.sqrt(Math.pow(earthRadius + item.avgAlt, 3) / GM));
+    //Delete the avgAlt property
+    delete item.avgAlt;
+    //Add orbitalPeriod property
+    item.orbitalPeriod = tmp;
+  });
+  return arr;
+}
+
+// test here
+orbitalPeriod([{name : "sputnik", avgAlt : 35873.5553}]);
