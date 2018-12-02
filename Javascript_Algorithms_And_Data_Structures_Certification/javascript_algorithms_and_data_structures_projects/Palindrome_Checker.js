@@ -16,6 +16,19 @@
 // split all letters and join
 
 
+function palindrome(str) {
+    // Good luck!
+    // remove all non-alphanumeric characters and make lower case
+    var removeNonLetters = str.replace(/[^0-9a-z]/gi, '').toLowerCase();
+    var palTester = removeNonLetters.split('').reverse().join('').toString();
+    if(removeNonLetters !== palTester) {
+       return false;
+    } else {
+      return true;
+    }
+  }
+  
+
 palindrome("eye") should return a boolean.
 palindrome("eye") should return true.
 palindrome("_eye") should return true.
