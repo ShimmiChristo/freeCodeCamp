@@ -11,7 +11,6 @@
  // 1. check if the register has enough funds
  // 2. if have enough change, return the change due 
  
- 
  var changeObjects = [
     { name: 'ONE HUNDRED', val: 100.00},
     { name: 'FIFTY', val: 50.00},
@@ -26,59 +25,54 @@
   ];
 
 
-
 function checkCashRegister(price, cash, cid) {
-
-  var changeDue = cash - price;
+  var change = cash - price;
   var cashStatus = {status: null, change: []};
-  var total = 0;
-  // console.log(changeDue);
+  var register = {total: 0};
 
-
-
+ // convert cid array in an object
   for(var i=0; i < cid.length; i++) {
-    // console.log(cid[i][1]);
-    total += cid[i][1];
-    // console.log(total);
+    register.total += cid[i][1];
+    register[cid[i][0]] = cid[i][1];
   }
-        // for (var i in cid[0]) {
-        //   console.log();
-        //   // obj.hasOwnProperty() is used to filter out properties from the object's prototype chain
-        //   if (changeObjects.hasOwnProperty(i)) {
-        //   //  console.log(changeObjects[i].val);
-        //    total += changeObjects[i].val;
-        //   }
-        // }
-        // console.log(currentRegister);
-        // console.log(total);
-        // console.log(change);
 
-// if insufficient funds
-  if (total < changeDue) {
-    cashStatus.status = "INSUFFICIENT_FUNDS";
-  } 
-  if (total == changeDue) {
+// if exact change 
+  if (register.total == change) {
     cashStatus.status = "CLOSED";
+    cashStatus.change = cid;
+    return cashStatus;
+  }
+
+// loop through changeObjects array and upadte the change and values while ther is still money of each type in the drawer and while the changeObjects value > change remaining
+  var changeDue = [];
+// console.log(changeObjects);
+  for (var j=0; j < changeObjects.length; j++) {
+    var value = 0;
+    while (register[changeObjects[j].name] > 0 && change >= changeObjects[j].val) {
+      change -= changeObjects[j].val;
+      register[changeObjects[j].name] -= changeObjects[j].val;
+      value += changeObjects[j].val;
+      change = Math.round(change * 100)/100;
+    }
+
+    if (value > 0) {
+    changeDue.push([changeObjects[j].name, value]);
+    }
+  }
+// if insufficient funds
+  if(change > 0 || changeDue < 1) {
+    cashStatus.status = "INSUFFICIENT_FUNDS";
+    return cashStatus;
   }
 
   // Here is your change, ma'am.
   // return change;
+    cashStatus.status = 'OPEN';
+    cashStatus.change = changeDue;
     return cashStatus;
+
   
 }
 
-// Example cash-in-drawer array:
-// [["PENNY", 1.01],
-// ["NICKEL", 2.05],
-// ["DIME", 3.1],
-// ["QUARTER", 4.25],
-// ["ONE", 90],
-// ["FIVE", 55],
-// ["TEN", 20],
-// ["TWENTY", 60],
-// ["ONE HUNDRED", 100]]
-
-// checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]);
-// checkCashRegister(19.5, 20, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 1], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]);
-// checkCashRegister(19.5, 20, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]);
 checkCashRegister(3.26, 100, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]);
+// checkCashRegister(19.5, 20, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]);
