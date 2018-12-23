@@ -4,32 +4,82 @@
 <body>
 
 <script>
+    // document.addEventListener('DOMContentLoaded',function (){
+    //     req=new XMLHttpRequest();
+    //     req.open("GET", jsonData, true);
+    //     req.send();
+    //     req.onload=function() {
+    //         json=JSON.parse(req.responseText);
+    //         console.log(json.data); 
+    //         // return json.data;
+    //         // return dataset;
+    //     }   
+    // });
     const jsonData = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json";
-    document.addEventListener('DOMContentLoaded',function() {
-        req=new XMLHttpRequest();
-        req.open("GET", jsonData, true);
+    var createXhrRequest = function( httpMethod, url, callback ) {
+    var req = new XMLHttpRequest();
+        req.open( httpMethod, url );
+        req.onload = function() {
+            callback( null, req.response );
+        }; 
+        req.onerror = function() {
+            callback( req.response );
+        };
         req.send();
-        req.onload=function() {
-            json=JSON.parse(req.responseText);
-            const dataset = json.data;
-        }
-    })
+    }
+    createXhrRequest( "GET", jsonData, function( err, response ) {
+        if( err ) { console.log( "Error!" ); }
+        return returnedData(response);
+    });
+    function returnedData (response) {
+        const data = JSON.parse(response);
+        const w = 900;
+        const h = 100;
+        const padding = 1;
+        // console.log(data.data);
+        const dataset = data.data;
+        const xScale = d3.scaleLinear()
+                     .domain([0, d3.max(dataset, (d) => d[0])])
+                     .range([padding, w - padding]);
+        const yScale = d3.scaleLinear()
+                     .domain([0, d3.max(dataset, (d) => d[1])])
+                     .range([h - padding, padding]);
+        const svg = d3.select('body')
+                    .append('svg')
+                    .attr('width',w)
+                    .attr('height',h);
+        svg.selectAll("rect")
+            .data(dataset)
+            .enter()
+            .append("rect")
+            .attr('x', (d,i) => {
+                return i;
+            })
+            // .attr('y', (d) => yScale(d[1]))
+            // .attr('y', (d) => h - d[1])
+            .attr('y', (d, i) => {
+                return h - d[1]/200;
+            })
+            .attr('width', 1)
+            // .attr('height', (d) => {
+                // return d[1];
+            // })
+            // .attr('height', (d) => yScale(d[1]))
+            .attr('height', (d,i) => d[1]/100)
+            .style('stroke', 'blue');
+            // .attr("x", (d) => xScale(d[0]))
+            // .attr("y",(d) => yScale(d[1]));
+
+    }
+   
+    // d3.select("body")
+    //     .append("title")
+    //     .text('Bar Chart Project');
+    // d3.select('body')
+    //     .append('div')
+    //     .attr('id','bar-chart');
 
 
-
-    const w = 500;
-    const h = 100;
-    const svg = d3.select('body')
-                .append('svg')
-                .attr('width',w)
-                .attr('height',h);
-
-    d3.select("body")
-        .append("title")
-        .text('Bar Chart Project');
-    d3.select('body')
-        .append('div')
-        .attr('id','bar-chart');
 
     
 </script>
