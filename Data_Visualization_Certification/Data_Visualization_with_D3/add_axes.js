@@ -44,7 +44,7 @@
        .append("text")
        .text((d) =>  (d[0] + "," + d[1]))
        .attr("x", (d) => xScale(d[0] + 10))
-       .attr("y", (d) => yScale(d[1]))
+       .attr("y", (d) => yScale(d[1]));
     
     const xAxis = d3.axisBottom(xScale);
     // Add your code below this line
